@@ -7,7 +7,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => Profile()),
-        ChangeNotifierProvider(create: (_) => MeditationProvider()), // Add MeditationProvider here
+        ChangeNotifierProvider(create: (_) => MeditationProvider()),
       ],
       child: const MeditationApp(),
     ),
@@ -33,7 +33,6 @@ class MeditationApp extends StatelessWidget {
   }
 }
 
-// Welcome Page
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
 
@@ -269,7 +268,6 @@ class _AnimationPageState extends State<AnimationPage> {
                 ),
                 const SizedBox(height: 20),
 
-                // Titles
                 const Text(
                   'Welcome Back',
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
@@ -281,7 +279,6 @@ class _AnimationPageState extends State<AnimationPage> {
                 ),
                 const SizedBox(height: 30),
 
-                // Email Field
                 _buildTextField(
                   label: 'Email',
                   icon: Icons.email_outlined,
@@ -297,7 +294,6 @@ class _AnimationPageState extends State<AnimationPage> {
                 ),
                 const SizedBox(height: 20),
 
-                // Password Field
                 _buildTextField(
                   label: 'Password',
                   icon: Icons.lock_outline,
@@ -312,7 +308,6 @@ class _AnimationPageState extends State<AnimationPage> {
                 ),
                 const SizedBox(height: 30),
 
-                // Sign Up Button
                 ElevatedButton(
                   onPressed: _signup,
                   style: ElevatedButton.styleFrom(
@@ -328,7 +323,7 @@ class _AnimationPageState extends State<AnimationPage> {
                 ),
                 const SizedBox(height: 20),
 
-                // Register Button
+
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
@@ -385,7 +380,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const SizedBox(height: 40),
-                  // Image or Illustration
+
                   Image.asset(
                     'assets/skippy.gif',
                     height: 150,
@@ -393,7 +388,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                   const SizedBox(height: 20),
 
-                  // Title
+
                   const Text(
                     'Register',
                     style: TextStyle(
@@ -457,7 +452,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
                   const SizedBox(height: 15),
 
-                  // Mobile Number Field
                   TextFormField(
                     controller: number,
                     keyboardType: TextInputType.phone,
@@ -480,7 +474,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
                   const SizedBox(height: 15),
 
-                  // Gender Dropdown Field
                   DropdownButtonFormField<String>(
                     value: selectedGender,
                     items: genders.map((String value) {
@@ -505,7 +498,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
                   const SizedBox(height: 15),
 
-                  // Password Field
                   TextFormField(
                     controller: password,
                     obscureText: true,
@@ -538,7 +530,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
                   const SizedBox(height: 20),
 
-                  // Sign Up Button
                   SizedBox(
                     width: double.infinity,
                     height: 50,
@@ -617,7 +608,6 @@ class BottomNavWithCards extends StatefulWidget {
 class _BottomNavWithCardsState extends State<BottomNavWithCards> {
   int _selectedIndex = 0;
 
-  // Pages for each tab
   final List<Widget> _pages = [
     TodayPage(),
     SearchResultsPage(initialSearchQuery: '',),
@@ -633,7 +623,7 @@ class _BottomNavWithCardsState extends State<BottomNavWithCards> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_selectedIndex], // Render the selected page
+      body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
@@ -682,7 +672,6 @@ class TodayPage extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              // Notification action
             },
             icon: const Icon(Icons.notifications, color: Colors.black),
           ),
@@ -874,7 +863,7 @@ class TodayPage extends StatelessWidget {
 }
 class MeditationTimerPage extends StatefulWidget {
   final String title;
-  final int time; // Time in minutes
+  final int time;
 
   MeditationTimerPage({required this.title, required this.time});
 
@@ -933,7 +922,7 @@ class _MeditationTimerPageState extends State<MeditationTimerPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Circular Timer Design
+
             Stack(
               alignment: Alignment.center,
               children: [
@@ -971,7 +960,7 @@ class _MeditationTimerPageState extends State<MeditationTimerPage> {
               ],
             ),
             const SizedBox(height: 30),
-            // Start/Stop Switch
+
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -1198,7 +1187,6 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
               ],
             ),
             const SizedBox(height: 20),
-            // Music Controls
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -1243,7 +1231,7 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
 }
 
 class Profile with ChangeNotifier {
-  String name = 'Lacey Fernandez';
+  String name = 'Alikhan';
   String email = 'example@example.com';
   String mobile = '1234567890';
   String dob = '01/01/2000';
@@ -1376,7 +1364,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      // Save the updated profile data using the provider
+
                       profile.updateProfile(
                         name: nameController.text,
                         email: emailController.text,
