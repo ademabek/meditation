@@ -1694,6 +1694,7 @@ class _TodayPageWithVideoState extends State<TodayPageWithVideo> {
               const SizedBox(height: 10),
               _buildCompletedActivities(),
             ],
+
           ),
         ),
       ),
