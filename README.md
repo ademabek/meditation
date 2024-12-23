@@ -1,4 +1,4 @@
-# petprojectmain
+# HeadSpace
 
 A new Flutter project for meditation and spending time correctly 
 
