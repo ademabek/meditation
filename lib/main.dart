@@ -156,7 +156,6 @@ class _FirstPageState extends State<FirstPage> {
                 ),
                 const SizedBox(height: 40),
 
-                // Get Started Button
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
@@ -536,7 +535,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: ElevatedButton(
                       onPressed: () {
                         if (formkey.currentState!.validate()) {
-                          // Register User Logic
+
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -1018,24 +1017,21 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
     {"title": "Downriver", "description": "Sleep sound - 45 mins"},
   ];
 
-  // This will store the filtered list based on the search input.
   List<Map<String, String>> _filteredSessions = [];
 
-  // Store the current search query text.
   String _searchQuery = "";
 
   @override
   void initState() {
     super.initState();
-    // Start with the search query given and show filtered results.
+
     _searchQuery = widget.initialSearchQuery;
     _filterSessions(_searchQuery);
   }
 
-  // Function to filter the sessions based on the search query.
   void _filterSessions(String query) {
     setState(() {
-      // Check if the query matches the title or description of a session.
+
       _filteredSessions = _sessions.where((session) {
         final title = session['title']!.toLowerCase();
         final description = session['description']!.toLowerCase();
@@ -1077,7 +1073,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
             title: session['title']!,
             description: session['description']!,
             onTap: () {
-              // Navigate to the detailed music player page when tapped.
+
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -1094,7 +1090,6 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
     );
   }
 
-  // Widget for displaying each session as a card.
   Widget _buildSessionCard({
     required String title,
     required String description,
@@ -1204,7 +1199,6 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Music Details
             Text(
               widget.title,
               style: const TextStyle(
@@ -1232,7 +1226,7 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
               ),
             ),
             const SizedBox(height: 30),
-            // Progress Bar
+
             Slider(
               value: _currentPosition,
               min: 0.0,
