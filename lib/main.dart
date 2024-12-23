@@ -69,7 +69,6 @@ class _WelcomePageState extends State<WelcomePage> {
               style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
             ),
           ],
-
         ),
       ),
     );
@@ -91,7 +90,7 @@ class _FirstPageState extends State<FirstPage> {
   @override
   void initState() {
     super.initState();
-    // Timer to change the words every 2 seconds
+
     Timer.periodic(const Duration(seconds: 2), (Timer timer) {
       setState(() {
         _currentIndex = (_currentIndex + 1) % _changingWords.length;
@@ -983,7 +982,7 @@ class _MeditationTimerPageState extends State<MeditationTimerPage> {
               ],
             ),
             const SizedBox(height: 20),
-            // Suggestion Text
+
             const Text(
               "Focus on your breathing.\nRelax and let go of distractions.",
               textAlign: TextAlign.center,
@@ -1009,6 +1008,7 @@ class SearchResultsPage extends StatefulWidget {
 }
 
 class _SearchResultsPageState extends State<SearchResultsPage> {
+  // A list of sessions for the app, acting as mock data for now.
   final List<Map<String, String>> _sessions = [
     {"title": "Rain Radio", "description": "Sleep aid - 500 mins"},
     {"title": "Night Sound", "description": "Sleep aid - 60 mins"},
@@ -1018,18 +1018,24 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
     {"title": "Downriver", "description": "Sleep sound - 45 mins"},
   ];
 
+  // This will store the filtered list based on the search input.
   List<Map<String, String>> _filteredSessions = [];
+
+  // Store the current search query text.
   String _searchQuery = "";
 
   @override
   void initState() {
     super.initState();
+    // Start with the search query given and show filtered results.
     _searchQuery = widget.initialSearchQuery;
     _filterSessions(_searchQuery);
   }
 
+  // Function to filter the sessions based on the search query.
   void _filterSessions(String query) {
     setState(() {
+      // Check if the query matches the title or description of a session.
       _filteredSessions = _sessions.where((session) {
         final title = session['title']!.toLowerCase();
         final description = session['description']!.toLowerCase();
@@ -1044,17 +1050,25 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
     return Scaffold(
       appBar: AppBar(
         title: TextField(
+          // Update the search results whenever the text changes.
           onChanged: _filterSessions,
           controller: TextEditingController(text: _searchQuery),
-          decoration: InputDecoration(
-            hintText: "Search",
+          decoration: const InputDecoration(
+            hintText: "Search", // Placeholder text in the search bar.
             border: InputBorder.none,
-            icon: const Icon(Icons.search),
+            icon: Icon(Icons.search), // Search icon on the left.
           ),
         ),
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: Colors.deepPurple, // Set a consistent color for the AppBar.
       ),
-      body: ListView.builder(
+      body: _filteredSessions.isEmpty
+          ? const Center(
+        child: Text(
+          "No results found.", // Display when there are no matches.
+          style: TextStyle(fontSize: 16, color: Colors.grey),
+        ),
+      )
+          : ListView.builder(
         padding: const EdgeInsets.all(16.0),
         itemCount: _filteredSessions.length,
         itemBuilder: (context, index) {
@@ -1063,7 +1077,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
             title: session['title']!,
             description: session['description']!,
             onTap: () {
-              // Navigate to MusicPlayerPage
+              // Navigate to the detailed music player page when tapped.
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -1080,6 +1094,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
     );
   }
 
+  // Widget for displaying each session as a card.
   Widget _buildSessionCard({
     required String title,
     required String description,
@@ -1105,6 +1120,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
     );
   }
 }
+
 class MusicPlayerPage extends StatefulWidget {
   final String title;
   final String description;
@@ -1118,17 +1134,62 @@ class MusicPlayerPage extends StatefulWidget {
 class _MusicPlayerPageState extends State<MusicPlayerPage> {
   double _currentPosition = 0.0;
   bool _isPlaying = false;
+  late Timer _timer;
+  late int _remainingTimeInSeconds;
+  int _totalTimeInSeconds = 3600;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _setTotalTime(widget.description);
+    _remainingTimeInSeconds = _totalTimeInSeconds;
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  void _setTotalTime(String description) {
+
+    RegExp regex = RegExp(r'(\d+)\s*min');
+    Match? match = regex.firstMatch(description);
+    if (match != null) {
+      _totalTimeInSeconds = int.parse(match.group(1)!) * 60;
+    }
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (_remainingTimeInSeconds > 0 && _isPlaying) {
+        setState(() {
+          _remainingTimeInSeconds--;
+          _currentPosition =
+              (_totalTimeInSeconds - _remainingTimeInSeconds) / _totalTimeInSeconds;
+        });
+      } else {
+        timer.cancel();
+      }
+    });
+  }
 
   void _playPauseMusic() {
     setState(() {
       _isPlaying = !_isPlaying;
     });
+    if (_isPlaying) {
+      _startTimer();
+    } else {
+      _timer.cancel();
+    }
   }
 
-  void _updatePosition(double value) {
-    setState(() {
-      _currentPosition = value;
-    });
+  String _formatTime(int seconds) {
+    int minutes = seconds ~/ 60;
+    int secs = seconds % 60;
+    return "${minutes.toString().padLeft(2, '0')}:${secs.toString().padLeft(2, '0')}";
   }
 
   @override
@@ -1175,26 +1236,35 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
             Slider(
               value: _currentPosition,
               min: 0.0,
-              max: 100.0,
-              onChanged: _updatePosition,
+              max: 1.0,
+              onChanged: (value) {
+
+              },
               activeColor: Colors.deepPurple,
               inactiveColor: Colors.grey.shade300,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text("0:00"),
-                Text("5:00"),
+              children: [
+                Text(
+                  _formatTime(_remainingTimeInSeconds),
+                  style: const TextStyle(fontSize: 16),
+                ),
+                Text(
+                  _formatTime(_totalTimeInSeconds),
+                  style: const TextStyle(fontSize: 16),
+                ),
               ],
             ),
             const SizedBox(height: 20),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
                   icon: const Icon(Icons.skip_previous, size: 40),
                   onPressed: () {
-                    // Handle previous
+
                   },
                 ),
                 IconButton(
@@ -1208,13 +1278,13 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
                 IconButton(
                   icon: const Icon(Icons.skip_next, size: 40),
                   onPressed: () {
-                    // Handle next
+
                   },
                 ),
               ],
             ),
             const SizedBox(height: 30),
-            // Motivational Text
+
             const Text(
               "Stay focused and keep going.\nGreat things take time!",
               textAlign: TextAlign.center,
