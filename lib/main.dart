@@ -750,7 +750,7 @@ class TodayPage extends StatelessWidget {
             ),
             _buildTimelineCard(
               context: context,
-              title: "Lavender Fields",
+              title: "Alikhan",
               type: "Sleepcast",
               time: "45 min",
               image: Colors.deepPurple,
