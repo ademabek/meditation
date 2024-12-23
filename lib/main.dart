@@ -69,6 +69,7 @@ class _WelcomePageState extends State<WelcomePage> {
               style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
             ),
           ],
+
         ),
       ),
     );
