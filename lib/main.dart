@@ -1050,17 +1050,17 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
           onChanged: _filterSessions,
           controller: TextEditingController(text: _searchQuery),
           decoration: const InputDecoration(
-            hintText: "Search", // Placeholder text in the search bar.
+            hintText: "Search",
             border: InputBorder.none,
-            icon: Icon(Icons.search), // Search icon on the left.
+            icon: Icon(Icons.search),
           ),
         ),
-        backgroundColor: Colors.deepPurple, // Set a consistent color for the AppBar.
+        backgroundColor: Colors.deepPurple,
       ),
       body: _filteredSessions.isEmpty
           ? const Center(
         child: Text(
-          "No results found.", // Display when there are no matches.
+          "No results found.",
           style: TextStyle(fontSize: 16, color: Colors.grey),
         ),
       )
